@@ -1,32 +1,35 @@
 const colors = [
-  "#FFFFFF",
-  "#2196F3",
-  "#4CAF50",
-  "#FF9800",
-  "#009688",
-  "#795548",
+  '#FFFFFF',
+  '#2196F3',
+  '#4CAF50',
+  '#FF9800',
+  '#009688',
+  '#795548',
 ];
+
+const body = document.querySelector('body');
+const startBtn = document.querySelector('.js-start');
+const stopBtn = document.querySelector('.js-stop');
+let interval;
+
 const randomIntegerFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
-const setRandomColor = () => {
-  const randomIndexColor = randomIntegerFromInterval(0, 6);
-  switcher.firstElementChild.style.backgroundColor = colors[randomIndexColor];
-};
-const switcher = document.querySelector(".switcher");
-let randomColor = null;
-let isIntervalFunctionWork = false;
-const changeColor = (elem) => {
-  if (
-    elem.target.dataset.action === "start" &&
-    isIntervalFunctionWork === false
-  ) {
-    randomColor = setInterval(() => setRandomColor(), 1000);
-    isIntervalFunctionWork = true;
-  }
-  if (elem.target.dataset.action === "stop") {
-    clearInterval(randomColor);
-    isIntervalFunctionWork = false;
-  }
-};
-switcher.addEventListener("click", changeColor);
+
+function changeBackground(colorsArray) {
+  const randomColorIdx = randomIntegerFromInterval(0, colorsArray.length - 1);
+  body.style.background = colorsArray[randomColorIdx];
+}
+
+startBtn.addEventListener('click', () => {
+  startBtn.disabled = true;
+  interval = setInterval(() => {
+    changeBackground(colors);
+  }, 1000);
+});
+
+stopBtn.addEventListener('click', () => {
+  startBtn.disabled = false;
+  clearInterval(interval);
+  console.log('stopped setting color!');
+});
